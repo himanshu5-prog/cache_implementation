@@ -25,13 +25,10 @@ class Cache {
     //Stats-----------------
     int cacheMiss;
     int cacheHit;
-
-
     int totalTransaction;
-
+    //-----------------------
     int offsetBitCount;
     int indexBitCount;
-    
     int indexMask;
     int cycleTime;
 
