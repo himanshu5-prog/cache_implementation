@@ -70,12 +70,6 @@ void DirectMapped :: run(){
     incrementCycleTime();
 }
 
-void DirectMapped :: printStats(){
-    std :: cout << "Total transaction: " <<  std:: dec << totalTransaction << "\n";
-    std :: cout << "Cache miss: " << std :: dec <<cacheMiss << "\n";
-    std :: cout << "Cache hit: " << std :: dec << cacheHit << "\n";
-}
-
 void DirectMapped :: printValidCache(){
     std :: cout << "Cache content\n";
     for (int i =0; i < 1024; ++i){

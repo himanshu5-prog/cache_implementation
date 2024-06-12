@@ -42,6 +42,7 @@ class Cache {
     void setAddrParam();
     void printAddr();
     void incrementCycleTime();
+    void printStats();
 };
 
 #endif

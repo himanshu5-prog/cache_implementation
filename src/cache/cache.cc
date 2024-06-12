@@ -57,6 +57,12 @@ void Cache :: incrementCycleTime(){
     cycleTime += 1;
 }
 
+void Cache :: printStats(){
+    std :: cout << "Total transaction: " <<  std:: dec << totalTransaction << "\n";
+    std :: cout << "Cache miss: " << std :: dec <<cacheMiss << "\n";
+    std :: cout << "Cache hit: " << std :: dec << cacheHit << "\n";
+}
+
 void Cache :: printAddr(){
     std :: string trType;
 
