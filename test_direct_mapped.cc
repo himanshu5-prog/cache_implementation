@@ -3,7 +3,8 @@
 int main(){
 
     DirectMapped cache;
-
+    
+    //Setting the address and place it in cache if needed
     cache.setAddr(0x12, WRITE);
     cache.run();
 
@@ -19,6 +20,7 @@ int main(){
     cache.setAddr(0x12345, READ);
     cache.run();
 
+    //Done with test and print out the stats
     cache.printStats();
     cache.printValidCache();
     
