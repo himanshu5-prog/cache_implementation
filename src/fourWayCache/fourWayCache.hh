@@ -5,9 +5,9 @@
 #include "../common.hh"
 
 #define NUMBER_OF_WAYS 4
-
+#define TOTAL_LINE_COUNT 1024
 class FourWayCache : public Cache {
-    CacheElement table[256][4];
+    CacheElement table[TOTAL_LINE_COUNT/NUMBER_OF_WAYS][NUMBER_OF_WAYS];
 
     public:
     FourWayCache();
