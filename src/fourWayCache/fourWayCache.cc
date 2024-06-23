@@ -38,6 +38,7 @@ int FourWayCache :: getEvictCacheLineId(){
     bool flag = false;
     int t;
     int id;
+    //Least recently used Eviction policy is getting used
     for (int i = 0; i < NUMBER_OF_WAYS; ++i){
         assert (table[index][i].valid);
 
