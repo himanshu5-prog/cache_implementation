@@ -12,8 +12,8 @@ struct CacheElement {
     unsigned int tag;
     unsigned int addr;
     int updateTime;
-
-    CacheElement() : valid (false), dirty(false), tag(0), addr(0), updateTime(0) {}
+    CacheState cacheState;
+    CacheElement() : valid (false), dirty(false), tag(0), addr(0), updateTime(0), cacheState(INVALID){}
 };
 
 void printCacheLine(CacheElement c);

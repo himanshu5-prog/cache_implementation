@@ -9,6 +9,15 @@ enum TransactionType {
     WRITE,
     READ
 };
+
+enum CacheState {
+    INVALID,
+    MODIFIED,
+    OWNED,
+    EXCLUSIVE,
+    SHARED
+};
+
 // Breakdown of address----
 struct Address {
     bool valid;
