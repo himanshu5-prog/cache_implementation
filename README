@@ -1,0 +1,29 @@
+################ Cache Implementation ######################
+This codebase has cache implementation for direct and 4-way set associative cache. Both cache type has total 1024 lines present in it.
+
+src/cache : Contains Cache class definition (which act as base class)
+
+src/directMapped: Contains DirectMapped class definition which is derived class of Cache class
+
+src/FourWayCache: Contains FourWayCache class definition which is derived class of Cache class
+
+compileCode.tcl: Compile command for DirectMapped cache
+
+compileCodeFourWay.tcl: Compile command for four way set associative cache
+
+test_direct_mapped.cc: This is test code for direct mapped cache.
+
+test_fourWayCache.cc: This is test code for 4-way set associative cache.
+
+### How to run the code
+
+1) Compile the code using compileCode* tcl file (Example of directMapped is provided):
+   
+    source compileCode.tcl
+
+2) The binary file will be stored in bin directory. Use this command to run the code:
+    
+    ./bin/directMapped
+
+    In codebase, there are debug print statement to help us unnderstand what is happening for each request.
+    Different test can be tried by including the test file in compile command.
