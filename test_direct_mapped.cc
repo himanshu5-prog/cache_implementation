@@ -1,5 +1,6 @@
 
 #include "src/directMapped/directMapped.hh"
+#define TOTAL_TRANSACTION_COUNT 10
 
 void test();
 void test_random();
@@ -43,7 +44,7 @@ void test_random(){
     addr = rand() % 0xffff;
     TransactionType t;
 
-    for (int i = 0; i <10; ++i){
+    for (int i = 0; i < TOTAL_TRANSACTION_COUNT; ++i){
         //Generating random address
         addr = rand() % 0xffff;
 
