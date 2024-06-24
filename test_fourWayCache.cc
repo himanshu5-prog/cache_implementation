@@ -28,7 +28,10 @@ int main(){
     cache.run();
     cache.incrementCycleTime();
 
-
+    cache.setAddr(0x4024, READ);
+    cache.printAddr();
+    cache.run();
+    cache.incrementCycleTime();
 
     cache.printStats();
     cache.printValidCache();
