@@ -38,12 +38,12 @@ void Cache :: setOffset(){
 }
 
 void Cache :: setIndex(){
-    std :: cout << "setIndex:: indexMask: 0x" << std:: hex << indexMask << "\n";
+    //std :: cout << "setIndex:: indexMask: 0x" << std:: hex << indexMask << "\n";
     currentAddr.index = (currentAddr.value >> 4 ) & indexMask;
 }
 
 void Cache :: setTag(){
-    std :: cout << "setTag :: offset bit count: " << offsetBitCount << ", index bit count: " <<std :: dec <<  indexBitCount << "\n";
+    //std :: cout << "setTag :: offset bit count: " << offsetBitCount << ", index bit count: " <<std :: dec <<  indexBitCount << "\n";
     currentAddr.tag = currentAddr.value >> (offsetBitCount + indexBitCount);
 }
 
@@ -83,5 +83,5 @@ void Cache :: printAddr(){
 }
 
 void printCacheLine(CacheElement c){
-    std :: cout << "valid: " << c.valid << ", dirty: " << c.dirty << ", tag: 0x" << std :: hex << c.tag << ", addr: 0x" << std :: hex << c.addr << ", updateTime: " << c.updateTime << "\n";
+    std :: cout << "valid: " << c.valid << ", dirty: " << c.dirty << ", tag: 0x" << std :: hex << c.tag << ", addr: 0x" << std :: hex << c.addr << ", updateTime: " << std :: dec << c.updateTime << "\n";
 }

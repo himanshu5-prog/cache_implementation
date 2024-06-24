@@ -98,7 +98,7 @@ void FourWayCache :: run(){
     if (wayId != -1){
         //Cache hit
         cacheHit += 1;
-        std :: cout << "run: Cache hit\n";
+        std :: cout << "run: Cache hit for addr: 0x" <<  std :: hex <<currentAddr.value << "\n";
 
         table[index][wayId].updateTime = cycleTime;
 
@@ -109,7 +109,7 @@ void FourWayCache :: run(){
     } else {
         //Cache miss
         cacheMiss += 1;
-        std :: cout << "run :: Cache miss\n";
+        std :: cout << "run :: Cache miss for addr: 0x" << std :: hex << currentAddr.value << "\n";
         freeSlot = getEmptySlot();
         std :: cout << "freeSlot: " << std :: dec <<freeSlot << "\n";
         if (freeSlot != -1){
@@ -129,7 +129,7 @@ void FourWayCache :: printValidCache(){
     for (int i = 0; i < 256; ++i){
         for (int j = 0; j < NUMBER_OF_WAYS; ++j){
             if (table[i][j].valid){
-                std :: cout << "index: " << i << ", way: " << j << " : ";
+                std :: cout << "index: " << std::dec << i << ", way: " << j << " : ";
                 printCacheLine(table[i][j]);
             }
         }
