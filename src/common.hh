@@ -30,5 +30,20 @@ struct Address {
 
     Address() : valid(false), value(0), tag(0), index(0), offset(0), type(READ) {}
 };
+
+enum CacheType {
+    DIRECT_MAPPED,
+    FOUR_WAY,
+    EIGHT_WAY,
+    TOTAL_CACHE_TYPE
+};
+
+enum CacheReplacementPolicy {
+    LRU, // Least Recently Used
+    FIFO, // First In First Out
+    SRRIP, // Static Re-Reference Interval Prediction
+    RANDOM, // Random Replacement
+    TOTAL_CACHE_POLICY
+};
 //--------------------------------------------------------------------------------
 #endif 
