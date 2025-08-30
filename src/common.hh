@@ -3,7 +3,10 @@
 
 #include <iostream>
 #include <string>
-
+#include <vector>
+#include <cassert>
+#include <sstream>
+#include <fstream>
 
 enum TransactionType {
     WRITE,
@@ -45,5 +48,14 @@ enum CacheReplacementPolicy {
     RANDOM, // Random Replacement
     TOTAL_CACHE_POLICY
 };
+
+struct Transaction {
+    TransactionType type;
+    unsigned int value;
+    Transaction() : type(READ), value(0) {}
+    Transaction(TransactionType t, unsigned int v) : type(t), value(v) {}
+};
+
+std :: vector<Transaction> parseTraceFile(const std::string &filePath);
 //--------------------------------------------------------------------------------
 #endif 
