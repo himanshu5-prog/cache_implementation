@@ -55,7 +55,7 @@ void test_random(){
         cache.setAddr(addr,t);
         cache.printAddr();
         cache.run();
-        cache.incrementCycleTime();
+        //cache.incrementCycleTime();
     }
     cache.printStats();
     cache.printValidCache();
