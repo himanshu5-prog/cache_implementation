@@ -12,11 +12,13 @@ Cache :: Cache(){
     cacheHit = 0;
     cacheMiss = 0;
     totalTransaction = 0;
+    writeBacks = 0;
 
     offsetBitCount = 4;
     indexBitCount = 0;
     indexMask = 0;
     cycleTime = 0;
+    replacePolicy=LRU;
 }
 
 void Cache :: setAddr(unsigned int a, TransactionType type){
@@ -84,4 +86,8 @@ void Cache :: printAddr(){
 
 void printCacheLine(CacheElement c){
     std :: cout << "valid: " << c.valid << ", dirty: " << c.dirty << ", tag: 0x" << std :: hex << c.tag << ", addr: 0x" << std :: hex << c.addr << ", updateTime: " << std :: dec << c.updateTime << "\n";
+}
+
+int Cache :: getCycleTime() const {
+    return cycleTime;
 }

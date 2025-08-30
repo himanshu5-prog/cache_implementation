@@ -26,12 +26,13 @@ class Cache {
     int cacheMiss;
     int cacheHit;
     int totalTransaction;
+    int writeBacks;
     //-----------------------
     int offsetBitCount;
     int indexBitCount;
     int indexMask;
     int cycleTime;
-
+    CacheReplacementPolicy replacePolicy;
     public:
     Cache();
 
@@ -43,6 +44,7 @@ class Cache {
     void printAddr();
     void incrementCycleTime();
     void printStats();
+    int getCycleTime() const;
 };
 
 #endif
