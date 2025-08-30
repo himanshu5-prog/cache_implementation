@@ -49,7 +49,7 @@ void DirectMapped :: run(){
     if (currentAddr.valid){
 
         if (!isCacheHit()){
-            std :: cout << "DirectMapped: run :: Cache miss for address: 0x" << currentAddr.value << "\n";
+            std :: cout << "DirectMapped: run :: Cache miss for address: 0x" << currentAddr.value <<", cycle: "<< getCycleTime() <<"\n";
             printAddr();
             cacheMiss += 1;
             placeCacheLine();
@@ -60,7 +60,7 @@ void DirectMapped :: run(){
             if (currentAddr.type == WRITE)
                 table[currentAddr.index].dirty = true;
             
-            std :: cout << "DirectMapped: run :: cache hit for address: 0x" << currentAddr.value << "\n";
+            std :: cout << "DirectMapped: run :: cache hit for address: 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
             printAddr();
         }
 
