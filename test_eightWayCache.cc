@@ -63,11 +63,14 @@ int main(int argc, char* argv[]) {
     policy = policyMap[policyStr];
     cache.setDebugMode(cacheDebugMode);
     cache.setReplacementPolicy(policy);
-    
+    std :: string traceFile;
     std :: string inputFile2 = "trace/stress_trace.txt";
     std :: string inputFile3 = "trace/gemini_trace_2.txt";
     std :: string inputFile4 = "trace/same_set_mixed_trace_16B.txt";
-    std :: vector<Transaction> transactions = parseTraceFile(inputFile);
+
+    traceFile = inputFile;
+    std :: cout << "Using trace file: " << traceFile << "\n";
+    std :: vector<Transaction> transactions = parseTraceFile(traceFile);
     for (const auto &trans : transactions) {
         unsigned int value = trans.value;
         TransactionType type = trans.type;
