@@ -65,30 +65,33 @@ void DirectMapped :: run(){
     if (currentAddr.valid){
 
         if (!isCacheHit()){
-
             // Cache miss
             // Check if the line is present in the victim cache
-            if (victimCache && victimCache->isCacheHit(currentAddr.tag)){
-                // Found in victim cache, use it
-                CacheElement victimLine = victimCache->getCacheLineByTag(currentAddr.tag);
-                std::cout << "DirectMapped: run :: Cache hit in victim cache for address: 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
-                //printAddr();
-                // Place the victim line back into the main cache
-                table[currentAddr.index] = victimLine;
-                // Remove the line from the victim cache
-                victimCache->removeCacheLineByTag(currentAddr.tag);
-            } else {
-                // Not found in victim cache, handle as a regular cache miss
-                if (victimCache) {
-                    std::cout << "DirectMapped: run :: Victim cache exists but not hit. Cache miss for address: 0x" << currentAddr.value <<", cycle: "<< getCycleTime() <<"\n";
+            if (victimCache) {
+                if (victimCache->isCacheHit(currentAddr.tag)) {
+                    // Found in victim cache, use it
+                    CacheElement victimLine = victimCache->getCacheLineByTag(currentAddr.tag);
+                    std::cout << "DirectMapped: run :: Cache hit in victim cache for address: 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
+                    //printAddr();
+                    // Place the victim line back into the main cache
+                    table[currentAddr.index] = victimLine;
+                    // Remove the line from the victim cache
+                    victimCache->removeCacheLineByTag(currentAddr.tag);
+                    cacheHit += 1; // Count this as a hit since we found it in the victim cache
                 } else {
-                    std::cout << "DirectMapped: run :: Victim cache disabled. Cache miss for address: 0x" << currentAddr.value <<", cycle: "<< getCycleTime() <<"\n";
+                    // Not found in victim cache, handle as a regular cache miss
+                    std::cout << "DirectMapped: run :: Cache miss for address (miss in Victim cache and main cache): 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
+                    cacheMiss += 1;
+                    placeCacheLine();
                 }
-                //printAddr();
+            } else if (victimCache == nullptr) {
+                // Victim cache not enabled, handle as a regular cache miss
+                std::cout << "DirectMapped: run (No Victim Cache):: Cache miss for address: 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
                 cacheMiss += 1;
                 placeCacheLine();
             }
         } else {
+            // Cache hit
             cacheHit += 1;
             table[currentAddr.index].updateTime = cycleTime;
 
@@ -100,9 +103,7 @@ void DirectMapped :: run(){
             } else {
                 std::cout << "DirectMapped: run (No Victim Cache):: cache hit for address: 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
             }
-            //printAddr();
         }
-
         totalTransaction += 1;
     }
 
