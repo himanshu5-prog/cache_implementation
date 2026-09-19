@@ -63,6 +63,7 @@ void Cache :: printStats(){
     std :: cout << "Total transaction: " <<  std:: dec << totalTransaction << "\n";
     std :: cout << "Cache miss: " << std :: dec <<cacheMiss << "\n";
     std :: cout << "Cache hit: " << std :: dec << cacheHit << "\n";
+    std :: cout << "Write backs: " << std :: dec << writeBacks << "\n";
 }
 
 void Cache :: printAddr(){
