@@ -7,6 +7,7 @@
 #include <cassert>
 #include <sstream>
 #include <fstream>
+#include <memory>
 
 enum TransactionType {
     WRITE,
@@ -25,10 +26,10 @@ enum CacheState {
 // Breakdown of address--------------------------------------------------------------
 struct Address {
     bool valid;
-    unsigned int value;
-    unsigned int tag;
-    unsigned int index;
-    unsigned int offset;
+    uint64_t value;
+    uint64_t tag;
+    uint64_t index;
+    uint64_t offset;
     TransactionType type;
 
     Address() : valid(false), value(0), tag(0), index(0), offset(0), type(READ) {}
