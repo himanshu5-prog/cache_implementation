@@ -9,8 +9,8 @@
 struct CacheElement {
     bool valid;
     bool dirty;
-    unsigned int tag;
-    unsigned int addr;
+    uint64_t tag;
+    uint64_t addr;
     int updateTime;
     CacheState cacheState;
     CacheElement() : valid (false), dirty(false), tag(0), addr(0), updateTime(0), cacheState(INVALID){}
