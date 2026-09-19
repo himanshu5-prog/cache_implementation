@@ -5,9 +5,10 @@
 #include "../common.hh"
 #include "../victimCache/victimCache.hh"
 
+#define DIRECT_MAPPED_CACHE_SIZE 1024
 class DirectMapped : public Cache {
     
-    CacheElement table[1024];
+    CacheElement table[DIRECT_MAPPED_CACHE_SIZE];
     std::unique_ptr<VictimCache> victimCache; // Victim cache instance
 
     public:

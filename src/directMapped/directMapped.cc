@@ -13,8 +13,8 @@ void DirectMapped :: setVictimCacheEnabled(){
 }
 
 bool DirectMapped :: isCacheHit(){
-    int index = currentAddr.index;
-    int tag = currentAddr.tag;
+    uint64_t index = currentAddr.index;
+    uint64_t tag = currentAddr.tag;
 
     if (table[index].valid){
         if (tag == table[index].tag){
@@ -49,7 +49,7 @@ void DirectMapped :: placeCacheLine(){
 
         if (victimCache){
             std::cout << "DirectMapped: placeCacheLine :: Placing evicted line into victim cache.\n";
-            victimCache->placeCacheLine(table[index]);
+            victimCache->placeCacheLine(table[index], index); // Place the evicted line into the victim cache
         } else {
             std::cout << "DirectMapped: placeCacheLine :: Victim cache not enabled. Evicted line is just sent to lower level of cache.\n";
         }
@@ -68,25 +68,39 @@ void DirectMapped :: run(){
             // Cache miss
             // Check if the line is present in the victim cache
             if (victimCache) {
-                if (victimCache->isCacheHit(currentAddr.tag)) {
+                if (victimCache->isCacheHit(currentAddr.tag, currentAddr.index)) {
                     // Found in victim cache, use it
-                    CacheElement victimLine = victimCache->getCacheLineByTag(currentAddr.tag);
-                    std::cout << "DirectMapped: run :: Cache hit in victim cache for address: 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
-                    //printAddr();
+                    CacheElement victimLine = victimCache->getCacheLine(currentAddr.tag, currentAddr.index);
+                    std::cout << "DirectMapped: run :: Cache hit in victim cache for address: 0x" << std::hex << currentAddr.value << std::dec << ", cycle: " << getCycleTime() << "\n";
+                    
+                    if (currentAddr.type == WRITE) {
+                        victimLine.dirty = true; // Mark as dirty if it's a write operation
+                    }
+                    victimLine.updateTime = cycleTime; // Update the time for LRU or other policies if needed
                     // Place the victim line back into the main cache
+                    CacheElement evictedLine = table[currentAddr.index];
+
                     table[currentAddr.index] = victimLine;
                     // Remove the line from the victim cache
-                    victimCache->removeCacheLineByTag(currentAddr.tag);
+                    victimCache->removeCacheLine(currentAddr.tag, currentAddr.index);
                     cacheHit += 1; // Count this as a hit since we found it in the victim cache
+
+                    if (evictedLine.valid) {
+                        if (evictedLine.dirty) {
+                            writeBacks += 1; // Count write-back if the evicted line is dirty
+                        }
+                        // Place the evicted line into the victim cache
+                        victimCache->placeCacheLine(evictedLine, currentAddr.index);
+                    }
                 } else {
                     // Not found in victim cache, handle as a regular cache miss
-                    std::cout << "DirectMapped: run :: Cache miss for address (miss in Victim cache and main cache): 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
+                    std::cout << "DirectMapped: run :: Cache miss for address (miss in Victim cache and main cache): 0x" << std::hex << currentAddr.value << std::dec << ", cycle: " << getCycleTime() << "\n";
                     cacheMiss += 1;
                     placeCacheLine();
                 }
             } else if (victimCache == nullptr) {
                 // Victim cache not enabled, handle as a regular cache miss
-                std::cout << "DirectMapped: run (No Victim Cache):: Cache miss for address: 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
+                std::cout << "DirectMapped: run (No Victim Cache):: Cache miss for address: 0x" << std::hex << currentAddr.value << std::dec << ", cycle: " << getCycleTime() << "\n";
                 cacheMiss += 1;
                 placeCacheLine();
             }
@@ -99,9 +113,9 @@ void DirectMapped :: run(){
                 table[currentAddr.index].dirty = true;
             
             if (victimCache) {
-                std::cout << "DirectMapped: run (With Victim Cache):: cache hit for address: 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
+                std::cout << "DirectMapped: run (With Victim Cache):: cache hit for address: 0x" << std::hex << currentAddr.value << std::dec << ", cycle: " << getCycleTime() << "\n";
             } else {
-                std::cout << "DirectMapped: run (No Victim Cache):: cache hit for address: 0x" << currentAddr.value << ", cycle: " << getCycleTime() << "\n";
+                std::cout << "DirectMapped: run (No Victim Cache):: cache hit for address: 0x" << std::hex << currentAddr.value << std::dec << ", cycle: " << getCycleTime() << "\n";
             }
         }
         totalTransaction += 1;
@@ -112,7 +126,7 @@ void DirectMapped :: run(){
 
 void DirectMapped :: printValidCache(){
     std :: cout << "Cache content\n";
-    for (int i =0; i < 1024; ++i){
+    for (int i =0; i < DIRECT_MAPPED_CACHE_SIZE; ++i){
         if (table[i].valid){
             std:: cout << "index: " << std :: dec << i << ", ";
             printCacheLine(table[i]);
