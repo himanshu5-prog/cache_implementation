@@ -33,5 +33,7 @@ class VictimCache {
     void removeCacheLine(uint64_t tag, uint64_t index); // Remove a cache line by its tag and index from the victim cache
     int getCacheSize() const { return VICTIM_CACHE_SIZE; } // Get the size of the victim cache
     int getValidCacheLineCount() const; // Get the count of valid cache lines in the victim cache
+    bool isCacheFull() const; // Check if the victim cache is full
+    int getValidIndex();
 };
 #endif

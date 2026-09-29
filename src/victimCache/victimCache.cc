@@ -21,19 +21,26 @@ bool VictimCache::isCacheHit(uint64_t tag, uint64_t index) {
 }
 
 void VictimCache::placeCacheLine(CacheElement c, uint64_t index) {
-    // Place the cache line in the next available slot or evict if full
-    evictCacheLine(); // Evict the next line if needed
-    table[nextEvictIndex].cacheLine = c; // Place the new cache line
-    table[nextEvictIndex].index = index; // Set the associated index
-    table[nextEvictIndex].cacheLine.dirty = false; // Reset dirty bit for the new line
-    std::cout << "VictimCache: Placed line with direct-mapped cache index: " << index << ", tag: 0x" << std::hex << c.tag << " at index " << nextEvictIndex << "\n";
-    nextEvictIndex = (nextEvictIndex + 1) % VICTIM_CACHE_SIZE; // Update the eviction index (FIFO)
+    int slot = getValidIndex();          // first free slot, or -1 if full
+    if (slot == -1) {                    // full: evict FIFO victim
+        slot = nextEvictIndex;
+        std::cout << "VictimCache: Cache is full. Evicting line at index " << slot
+                  << " with address: 0x" << std::hex << table[slot].cacheLine.addr << std::dec
+                  << ", Direct-Mapped Index: " << table[slot].index << "\n";
+        evictCount++;
+        nextEvictIndex = (nextEvictIndex + 1) % VICTIM_CACHE_SIZE;
+    }
+    c.dirty = false;
+    table[slot].cacheLine = c;
+    table[slot].index = index;
+    std::cout << "VictimCache: Placed line with direct-mapped cache index: " << index
+              << ", tag: 0x" << std::hex << c.tag << std::dec << " at index " << slot << "\n";
 }
 
 CacheElement VictimCache::getEvictCacheLine() {
     CacheElement evictedLine = table[nextEvictIndex].cacheLine;
     table[nextEvictIndex].cacheLine.valid = false; // Mark the line as invalid
-    table[nextEvictIndex].index = -1; // Clear the associated index
+    table[nextEvictIndex].index = 0; // Clear the associated index
     return evictedLine;
 }
 
@@ -49,7 +56,7 @@ void VictimCache::printValidCache() {
     std::cout << "Victim Cache Contents:\n";
     for (int i = 0; i < VICTIM_CACHE_SIZE; ++i) {
         if (table[i].cacheLine.valid) {
-            std::cout << "Index: " << i << ", Tag: 0x" << std::hex << table[i].cacheLine.tag  << ", Direct-Mapped Index: " << table[i].index << ", Dirty: " << std::boolalpha << table[i].cacheLine.dirty << "\n";
+            std::cout << "Index: " << i << ", Tag: 0x" << std::hex << table[i].cacheLine.tag << std::dec << ", Direct-Mapped Index: " << table[i].index << ", Dirty: " << std::boolalpha << table[i].cacheLine.dirty << "\n";
         }
     }
 }
@@ -90,4 +97,17 @@ int VictimCache::getValidCacheLineCount() const {
         }
     }
     return count;
+}
+
+bool VictimCache::isCacheFull() const {
+    return getValidCacheLineCount() == VICTIM_CACHE_SIZE;
+}
+
+int VictimCache::getValidIndex() {
+    for (int i = 0; i < VICTIM_CACHE_SIZE; ++i) {
+        if (!table[i].cacheLine.valid) {
+            return i; // Return the first available index
+        }
+    }
+    return -1; // Return -1 if the cache is full
 }
