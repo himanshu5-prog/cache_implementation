@@ -27,7 +27,7 @@ bool DirectMapped :: isCacheHit(){
 
 void DirectMapped :: placeCacheLine(){
 
-    int index = currentAddr.index;
+    uint64_t index = currentAddr.index;
 
     CacheElement c;
     c.addr = currentAddr.value;
