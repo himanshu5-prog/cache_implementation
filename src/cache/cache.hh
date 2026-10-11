@@ -6,6 +6,8 @@
 #include <cstring>
 #include "../common.hh"
 
+#define OFFSET_BIT_COUNT 4
+#define OFFSET_MASK ((1 << OFFSET_BIT_COUNT) - 1)
 struct CacheElement {
     bool valid;
     bool dirty;
